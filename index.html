@@ -275,26 +275,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
   .deck-counter-bar{height:40px}
 }
 </style>
-<style>
-/* Free portal gating */
-.lesson-card.locked{cursor:pointer;position:relative}
-.lesson-card.locked .lesson-card-img{filter:grayscale(.6) brightness(.45)}
-.lesson-card.locked::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,9,10,.85));z-index:2;pointer-events:none}
-.lock-badge{position:absolute;top:10px;right:10px;z-index:3;background:rgba(8,9,10,.85);border:1px solid var(--border);color:var(--text-muted);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:6px;display:flex;align-items:center;gap:4px}
-.lock-badge .lock-icon{font-size:.75rem}
-.free-badge{position:absolute;top:10px;right:10px;z-index:3;background:var(--green-bg);border:1px solid rgba(16,185,129,.3);color:var(--green);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:6px}
-.buy-modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
-.buy-modal.open{display:flex}
-.buy-modal-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.buy-modal-card h3{font-size:1.3rem;margin-bottom:8px}
-.buy-modal-card .price{font-family:var(--mono);font-size:1.6rem;color:var(--accent);margin:12px 0}
-.buy-modal-card .sub{color:var(--text-muted);font-size:.85rem;margin-bottom:20px}
-.buy-modal-card .btn-buy{display:inline-block;padding:12px 28px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:590;font-size:.9rem;border:none;cursor:pointer;transition:all .2s}
-.buy-modal-card .btn-buy:hover{background:var(--accent-hover);transform:translateY(-1px)}
-.buy-modal-card .btn-buy.disabled{background:var(--bg3);color:var(--text-dim);cursor:not-allowed;pointer-events:none}
-.buy-modal-card .btn-close{margin-top:12px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem}
-.buy-modal-card .empty-state{margin-top:12px;font-family:var(--mono);font-size:.7rem;color:var(--text-dim);letter-spacing:.5px}
-</style>
 </head>
 <body data-site="4">
 
@@ -322,7 +302,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
   <div class="section-header">
     <div class="section-num">01</div>
     <h2>Lesson <span class="accent">Library</span></h2>
-    <p>2 free · 24 locked. Click a free topic to launch the slide deck, or unlock the full collection.</p>
+    <p>26 lessons across 3 categories. Click any topic to launch the slide deck.</p>
   </div>
   <div class="lesson-grid" id="lessonGrid"></div>
 </div>
@@ -354,19 +334,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 <div class="footer">
   <p>&copy; 2026 William Thomason English. Sliding In is a private teaching resource. Not for redistribution.</p>
-</div>
-
-<div class="buy-modal" id="buyModal" onclick="if(event.target===this)closeBuyModal()">
-  <div class="buy-modal-card">
-    <h3>Unlock the full deck</h3>
-    <p class="sub" id="buyModalTopic">This topic is part of the full Sliding In collection.</p>
-    <div class="price">$9</div>
-    <p class="sub">Student edition · 26 topics · full deck</p>
-    <p class="sub">Teacher edition (model answers) · $12</p>
-    <button class="btn-buy disabled" id="buyBtn">On Lemon Squeezy soon</button>
-    <div class="empty-state">Lemon Squeezy checkout will be wired here once the store is live.</div>
-    <button class="btn-close" onclick="closeBuyModal()">Close</button>
-  </div>
 </div>
 
 <div class="deck-view" id="deckView">
@@ -487,18 +454,17 @@ function initLibrary(){
     var cat=window.lessonData[i];
     for(var j=0;j<cat.topics.length;j++){
       var t=cat.topics[j];
-      var isFree = (t.slug === 'airportsflying' || t.slug === 'carsdriving');
       var card=document.createElement('a');
       card.href='#';
-      card.className='lesson-card' + (isFree ? '' : ' locked');
-      if(isFree){ card.onclick=function(c,t){return function(e){e.preventDefault();openDeck(c,t);};}(cat.category,t); } else { card.onclick=function(t){return function(e){e.preventDefault();openBuyModal(t);};}(t); }
+      card.className='lesson-card';
+      card.onclick=function(c,t){return function(e){e.preventDefault();openDeck(c,t);};}(cat.category,t);
       
       var imgSrc = mappingLookup[t.slug] || '';
       var imgHtml = imgSrc 
         ? '<div class="lesson-card-img-container"><img class="lesson-card-img" src="'+imgSrc+'" alt="" onerror="this.parentElement.innerHTML=\'<div class=lesson-card-img placeholder style=background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:.7rem>'+t.slug+'</div>\'"></div>'
         : '<div class="lesson-card-img-container"><div class="lesson-card-img placeholder" style="background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:.7rem">'+t.slug+'</div></div>';
 
-      card.innerHTML = imgHtml + (isFree ? '<div class="free-badge">Free</div>' : '<div class="lock-badge"><span class="lock-icon">&#128274;</span> Locked</div>') + '<div class="lesson-card-content"><div class="lesson-card-body"><div class="lesson-cat">'+cat.category+'</div><h3>'+t.title.replace(/ \\(\\d+ questions?\\)$/,'')+'</h3><div class="lesson-count">'+t.questions.length+' questions</div></div></div>';
+      card.innerHTML = imgHtml + '<div class="lesson-card-content"><div class="lesson-card-body"><div class="lesson-cat">'+cat.category+'</div><h3>'+t.title.replace(/ \\(\\d+ questions?\\)$/,'')+'</h3><div class="lesson-count">'+t.questions.length+' questions</div></div></div>';
       grid.appendChild(card);
     }
   }
@@ -628,18 +594,17 @@ for(var i=0;i<lessonData.length;i++){
   var cat=lessonData[i];
   for(var j=0;j<cat.topics.length;j++){
     var t=cat.topics[j];
-    var isFree = (t.slug === 'airportsflying' || t.slug === 'carsdriving');
-
+    var card=document.createElement('a');
     card.href='#';
-    card.className='lesson-card' + (isFree ? '' : ' locked');
-    if(isFree){ card.onclick=function(c,t){return function(e){e.preventDefault();openDeck(c,t);};}(cat.category,t); } else { card.onclick=function(t){return function(e){e.preventDefault();openBuyModal(t);};}(t); }
+    card.className='lesson-card';
+    card.onclick=function(c,t){return function(e){e.preventDefault();openDeck(c,t);};}(cat.category,t);
     
     var imgSrc = mappingLookup[t.slug] || '';
     var imgHtml = imgSrc 
       ? '<div class="lesson-card-img-container"><img class="lesson-card-img" src="'+imgSrc+'" alt=""></div>' 
       : '<div class="lesson-card-img-container"><div class="lesson-card-img placeholder" style="background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1rem">'+t.slug+'</div></div>';
 
-          card.innerHTML = imgHtml + (isFree ? '<div class="free-badge">Free</div>' : '<div class="lock-badge"><span class="lock-icon">&#128274;</span> Locked</div>') + '<div class="lesson-card-content"><div class="lesson-card-body"><div class="lesson-cat">'+cat.category+'</div><h3>'+t.title.replace(/ \\(\\d+ questions?\\)$/,'')+'</h3><div class="lesson-count">'+t.questions.length+' questions</div></div></div>';
+          card.innerHTML = imgHtml + '<div class="lesson-card-content"><div class="lesson-card-body"><div class="lesson-cat">'+cat.category+'</div><h3>'+t.title.replace(/ \\(\\d+ questions?\\)$/,'')+'</h3><div class="lesson-count">'+t.questions.length+' questions</div></div></div>';
     grid.appendChild(card);
   }
 }
@@ -662,16 +627,6 @@ window.openDeck=function(catName,topic){
   hideAnswers();
   document.getElementById('deckView').classList.add('open');
   renderSlide();
-};
-
-window.openBuyModal=function(topic){
-  var t = topic && topic.title ? topic.title : (topic || 'This topic');
-  var el = document.getElementById('buyModalTopic');
-  if(el) el.textContent = t.replace(/ \(\d+ questions?\)$/,'') + ' is part of the full Sliding In collection.';
-  document.getElementById('buyModal').classList.add('open');
-};
-window.closeBuyModal=function(){
-  document.getElementById('buyModal').classList.remove('open');
 };
 
 window.closeDeck=function(){
@@ -864,9 +819,6 @@ document.getElementById('deckImgToggle').addEventListener('click', function() {
 });
 
 document.addEventListener("keydown",function(e){
-  if(document.getElementById("buyModal").classList.contains("open")){
-    if(e.key==="Escape"){closeBuyModal();}return;
-  }
   if(!document.getElementById("deckView").classList.contains("open"))return;
   if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();nextSlide();}
   if(e.key==="ArrowLeft"){e.preventDefault();prevSlide();}
