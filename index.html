@@ -408,12 +408,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 <script src="lesson-data.js"></script>
 <script>
 var lessonData = window.lessonData || [];
-if(!lessonData.length){
-  fetch('lesson-data.json')
-    .then(function(r) { return r.json(); })
-    .then(function(data) { lessonData = data; if(window.tryInitLibrary) window.tryInitLibrary(); })
-    .catch(function(e) { console.error('Failed to load lesson data:', e); });
-}
 
 var topicImages = {};
 try { fetch("topic-images.json").then(function(r){return r.json();}).then(function(d){topicImages=d;}).catch(function(){}); } catch(e){}
@@ -883,5 +877,25 @@ document.addEventListener("keydown",function(e){
   <a href="https://paypal.me/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#0070ba;color:#fff;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">PayPal</a>
   <a href="https://wise.com/payme/williamgraythomason" target="_blank" rel="noopener" style="display:inline-block;background:#9fe870;color:#163300;padding:4px 12px;border-radius:4px;text-decoration:none;font-weight:600;font-size:11px;margin:0 4px">Wise</a>
 </div>
+<script>
+/* Sliding In — casual-copy guard */
+(function(){
+  var st=document.createElement('style');
+  st.textContent='body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}';
+  document.head.appendChild(st);
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('copy',function(e){e.preventDefault();});
+  document.addEventListener('cut',function(e){e.preventDefault();});
+  document.addEventListener('dragstart',function(e){e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='PrintScreen'||e.keyCode===44){
+      try{ if(navigator.clipboard) navigator.clipboard.writeText(''); }catch(err){}
+    }
+  });
+  window.addEventListener('blur',function(){
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(''); }catch(err){}
+  });
+})();
+</script>
 </body>
 </html>
