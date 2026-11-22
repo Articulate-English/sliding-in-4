@@ -392,6 +392,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
       <div class="deck-title-topic" id="deckTitle">Topic Title</div>
       <div class="deck-title-cat" id="deckTitleCat">Category</div>
     </div>
+    <button class="deck-btn" id="variantToggle" onclick="toggleVariant()" style="font-size:.75rem;padding:4px 10px">UK</button>
     <div class="deck-counter">
       <span class="dc-current" id="dcCurrent">1</span>
       <span style="color:var(--text-dim);font-size:.6rem">/</span>
@@ -520,7 +521,170 @@ function initLibrary(){
 // Auto-init when data loads
 document.addEventListener('DOMContentLoaded', function(){
   tryInitLibrary();
+  var vb=document.getElementById('variantToggle');
+  if(vb) vb.textContent=window._variant;
 });
+// UK/US English switch — rewrites every question, vocab item and model answer on the fly.
+window._variant = 'UK';
+try { window._variant = localStorage.getItem('slidingVariant') || 'UK'; } catch(e){}
+function _toUS(s){
+  if(!s) return s;
+  var m = {
+    'apologise':'apologize',
+    'apologised':'apologized',
+    'apologising':'apologizing',
+    'criticise':'criticize',
+    'criticised':'criticized',
+    'criticising':'criticizing',
+    'energise':'energize',
+    'energised':'energized',
+    'energising':'energizing',
+    'memorise':'memorize',
+    'memorised':'memorized',
+    'memorising':'memorizing',
+    'organise':'organize',
+    'organised':'organized',
+    'organises':'organizes',
+    'organising':'organizing',
+    'organisation':'organization',
+    'organisations':'organizations',
+    'personalise':'personalize',
+    'personalised':'personalized',
+    'personalising':'personalizing',
+    'practise':'practice',
+    'practised':'practiced',
+    'practising':'practicing',
+    'practises':'practices',
+    'realise':'realize',
+    'realised':'realized',
+    'realising':'realizing',
+    'recognise':'recognize',
+    'recognised':'recognized',
+    'recognising':'recognizing',
+    'socialise':'socialize',
+    'socialised':'socialized',
+    'socialising':'socializing',
+    'symbolise':'symbolize',
+    'symbolised':'symbolized',
+    'symbolising':'symbolizing',
+    'summarise':'summarize',
+    'summarised':'summarized',
+    'summarising':'summarizing',
+    'prioritise':'prioritize',
+    'prioritised':'prioritized',
+    'prioritising':'prioritizing',
+    'utilise':'utilize',
+    'utilised':'utilized',
+    'utilising':'utilizing',
+    'analyse':'analyze',
+    'analysed':'analyzed',
+    'analysing':'analyzing',
+    'emphasise':'emphasize',
+    'emphasised':'emphasized',
+    'emphasising':'emphasizing',
+    'minimise':'minimize',
+    'maximise':'maximize',
+    'optimise':'optimize',
+    'optimised':'optimized',
+    'specialise':'specialize',
+    'specialised':'specialized',
+    'familiarise':'familiarize',
+    'normalise':'normalize',
+    'normalised':'normalized',
+    'armour':'armor',
+    'behaviour':'behavior',
+    'behaviours':'behaviors',
+    'colour':'color',
+    'colours':'colors',
+    'favour':'favor',
+    'favours':'favors',
+    'favourite':'favorite',
+    'flavour':'flavor',
+    'flavours':'flavors',
+    'glamour':'glamor',
+    'harbour':'harbor',
+    'honour':'honor',
+    'honourable':'honorable',
+    'humour':'humor',
+    'labour':'labor',
+    'neighbour':'neighbor',
+    'neighbours':'neighbors',
+    'odour':'odor',
+    'rumour':'rumor',
+    'rumours':'rumors',
+    'splendour':'splendor',
+    'valour':'valor',
+    'vigour':'vigor',
+    'vapour':'vapor',
+    'centre':'center',
+    'centres':'centers',
+    'kilometre':'kilometer',
+    'kilometres':'kilometers',
+    'metre':'meter',
+    'metres':'meters',
+    'litre':'liter',
+    'litres':'liters',
+    'theatre':'theater',
+    'theatres':'theaters',
+    'fibre':'fiber',
+    'defence':'defense',
+    'offence':'offense',
+    'licence':'license',
+    'catalogue':'catalog',
+    'catalogues':'catalogs',
+    'programme':'program',
+    'programmes':'programs',
+    'dialogue':'dialog',
+    'dialogues':'dialogs',
+    'cancelled':'canceled',
+    'cancelling':'canceling',
+    'modelled':'modeled',
+    'modelling':'modeling',
+    'labelled':'labeled',
+    'labelling':'labeling',
+    'travelled':'traveled',
+    'travelling':'traveling',
+    'traveller':'traveler',
+    'fuelled':'fueled',
+    'fuelling':'fueling',
+    'judgement':'judgment',
+    'acknowledgement':'acknowledgment',
+    'ageing':'aging',
+    'cosy':'cozy',
+    'grey':'gray',
+    'whilst':'while',
+    'amongst':'among',
+    'towards':'toward',
+    'cheque':'check',
+    'tyre':'tire',
+    'tyres':'tires',
+    'aluminium':'aluminum',
+    'speciality':'specialty',
+    'fulfil':'fulfill',
+    'instalment':'installment',
+    'enrol':'enroll',
+    'skilful':'skillful'
+  };
+  var out = s;
+  Object.keys(m).forEach(function(k){
+    var re = new RegExp('\\b'+k+'\\b','gi');
+    out = out.replace(re, function(match){
+      if(match === match.toUpperCase()) return m[k].toUpperCase();
+      if(match[0] === match[0].toUpperCase()) return m[k][0].toUpperCase()+m[k].slice(1);
+      return m[k];
+    });
+  });
+  return out;
+}
+window.toggleVariant = function(){
+  window._variant = (window._variant === 'US') ? 'UK' : 'US';
+  try { localStorage.setItem('slidingVariant', window._variant); } catch(e){}
+  var btn = document.getElementById('variantToggle');
+  if(btn) btn.textContent = window._variant;
+  if(typeof renderSlide === 'function' && typeof questions !== 'undefined' && questions.length) renderSlide();
+};
+
+
 
 var mappingLookup = {};
 // Use local cover images from downloaded set
@@ -695,7 +859,8 @@ window.toggleAnswers=function(){
   var q=questions[currentIndex];
   var ul=document.getElementById('answersList');
   ul.innerHTML='';
-  var list=(q&&q.possibleAnswers)||[];
+  var _usA=(window._variant==='US');
+  var list=((q&&q.possibleAnswers)||[]).map(function(a){ return _usA ? _toUS(a) : a; });
   for(var i=0;i<list.length;i++){
     var li=document.createElement('li');
     li.textContent=list[i];
@@ -832,14 +997,16 @@ function renderSlide(){
   document.getElementById('slideCat').textContent=currentCat;
 
   // Question text with vocab words wrapped as dotted-underline inline spans
+  var _us=(window._variant==='US');
+  var _swap=function(s){ return _us ? _toUS(s) : s; };
   var qEl=document.getElementById('slideQuestion');
   qEl.textContent='';
-  var vocab=(q.vocab||[]);
-  qEl.innerHTML=wrapVocab(q.original, vocab);
+  var vocab=(q.vocab||[]).map(function(v){ return {word:_swap(v.word), definition:_swap(v.definition||'')}; });
+  qEl.innerHTML=wrapVocab(_swap(q.original), vocab);
 
   // Go deeper second prompt (with vocab words wrapped inline too)
   var gdEl=document.getElementById('slideGoDeeper');
-  gdEl.innerHTML=wrapVocab(q.paraphrased||'', vocab);
+  gdEl.innerHTML=wrapVocab(_swap(q.paraphrased||''), vocab);
 
   document.getElementById('deckProgressFill').style.width=((currentIndex+1)/questions.length*100)+'%';
   var shuffleBtn=document.getElementById('shuffleBtn');
