@@ -126,7 +126,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 
 /* Full-bleed background image */
 .slide-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
-.slide-bg img{width:100%;height:100%;object-fit:cover;animation:kenBurns 12s ease-in-out infinite alternate}
+.slide-bg img{width:100%;height:100%;object-fit:cover;object-position:top center;animation:kenBurns 12s ease-in-out infinite alternate}
 .slide-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.3) 60%,rgba(0,0,0,0.7) 100%);pointer-events:none}
 
 /* Slide content overlay */
@@ -944,6 +944,12 @@ window.cycleTheme=function(){
   var current = document.documentElement.getAttribute('data-theme') || 'dark';
   var nextTheme = SI_THEMES[(SI_THEMES.indexOf(current) + 1) % SI_THEMES.length];
   document.documentElement.setAttribute('data-theme', nextTheme);
+  // renderSlide() writes a per-topic palette as inline custom properties, which beat
+  // the [data-theme] rules — so a picked theme must clear them and suppress that.
+  window.__siUserTheme = nextTheme;
+  ['--bg','--bg-card','--accent','--text','--cta','--bg2','--bg3'].forEach(function(p){
+    document.documentElement.style.removeProperty(p);
+  });
   try { localStorage.setItem('slidingVariantTheme', nextTheme); } catch(e){}
   siSyncThemeUI(nextTheme);
 };
@@ -954,6 +960,7 @@ window.cycleTheme=function(){
   try { saved = localStorage.getItem('slidingVariantTheme'); } catch(e){}
   if(saved && SI_THEMES.indexOf(saved) >= 0){
     document.documentElement.setAttribute('data-theme', saved);
+    window.__siUserTheme = saved;   // keep the per-topic palette from overriding it
     siSyncThemeUI(saved);
   }
 })();
@@ -1052,16 +1059,18 @@ function renderSlide(){
   if(shuffleBtn) shuffleBtn.style.display = currentIndex===0 ? '' : 'none';
   hideAnswers();
 
-  // Apply per-topic random color theme
+  // Apply per-topic random color theme — unless the reader picked a theme themselves.
   var slug = currentTopicObj ? (currentTopicObj.slug||'') : currentTopic.toLowerCase().replace(/[^a-z0-9]/g,'');
   var theme = getTopicTheme(slug);
-  document.documentElement.style.setProperty('--bg', theme.bg);
-  document.documentElement.style.setProperty('--bg-card', theme.panel);
-  document.documentElement.style.setProperty('--accent', theme.accent);
-  document.documentElement.style.setProperty('--text', theme.text);
-  document.documentElement.style.setProperty('--cta', theme.cta);
-  document.documentElement.style.setProperty('--bg2', theme.bg);
-  document.documentElement.style.setProperty('--bg3', theme.panel);
+  if(!window.__siUserTheme){
+    document.documentElement.style.setProperty('--bg', theme.bg);
+    document.documentElement.style.setProperty('--bg-card', theme.panel);
+    document.documentElement.style.setProperty('--accent', theme.accent);
+    document.documentElement.style.setProperty('--text', theme.text);
+    document.documentElement.style.setProperty('--cta', theme.cta);
+    document.documentElement.style.setProperty('--bg2', theme.bg);
+    document.documentElement.style.setProperty('--bg3', theme.panel);
+  }
 
   // Use local image if available, otherwise fallback to Pollinations
   // Use local image if available, otherwise fallback to Pollinations.
