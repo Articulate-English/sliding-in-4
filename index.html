@@ -682,11 +682,12 @@ window.toggleVariant = function(){
   var btn = document.getElementById('variantToggle');
   if(btn) btn.textContent = window._variant;
   if(typeof renderSlide === 'function' && typeof questions !== 'undefined' && questions.length){
-    renderSlide();
-    // hideAnswers() only hides the card; the rendered <li>s keep the old spelling,
-    // so repaint them if the answers are on screen.
+    // hideAnswers() only hides the card — the rendered <li>s keep the old spelling —
+    // so remember whether the answers were open, repaint the slide, then repaint them.
     var ac=document.getElementById('answersCard');
-    if(ac && ac.classList.contains('show')){ ac.classList.remove('show'); toggleAnswers(); }
+    var answersShown = !!(ac && ac.classList.contains('show'));
+    renderSlide();
+    if(answersShown && typeof toggleAnswers === 'function') toggleAnswers();
   }
 };
 
