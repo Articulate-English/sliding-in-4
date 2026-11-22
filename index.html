@@ -305,9 +305,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .unlock-row .btn-buy{padding:10px 16px;font-size:.75rem}
 .unlock-msg{margin-top:8px;font-family:var(--mono);font-size:.65rem;min-height:1em;color:var(--text-dim)}
 .hidden{display:none!important}
+
+/* Floating colour-theme toggle (same pattern as the IELTS site) */
+.theme-toggle{position:fixed;top:14px;right:14px;z-index:200;display:inline-flex;align-items:center;gap:8px;
+  background:rgba(8,9,10,.86);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:8px;
+  cursor:pointer;font-family:var(--mono);font-size:.85rem;line-height:1;backdrop-filter:blur(8px);
+  transition:transform .2s,border-color .2s}
+.theme-toggle:hover{transform:scale(1.06);border-color:var(--accent)}
+.theme-toggle .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);transition:background .25s}
+@media(max-width:768px){.theme-toggle{top:8px;right:8px;padding:6px 9px}}
 </style>
 </head>
 <body data-site="4">
+<button class="theme-toggle" id="themeToggle" onclick="cycleTheme()" title="Cycle colour theme">
+  <span class="dot" id="themeToggleDot"></span>&#127912;
+</button>
+
 
 <div class="nav">
   <a href="#" class="nav-logo">&#9670; <span>SLIDING</span> IN</a>
@@ -910,21 +923,40 @@ document.addEventListener('click',function(e){
   hideVocabTip();
 });
 
+// 7 colour themes + dark/light base = 9 options. Shared by the nav control and the
+// floating toggle, and persisted the way the IELTS site does it.
+var SI_THEMES = ['dark','light','jungle','ocean','nebula','beach','planet','sunset','clouds'];
+var SI_THEME_COLORS = {dark:'#5e6ad2',light:'#5e6ad2',jungle:'#ffe000',ocean:'#abc4ff',nebula:'#07f49e',beach:'#eca9bb',planet:'#f5ccd4',sunset:'#f9a470',clouds:'#abc4ff'};
+var SI_THEME_LABELS = {dark:'Dark',light:'Light',jungle:'Jungle',ocean:'Ocean',nebula:'Nebula',beach:'Beach',planet:'Planet',sunset:'Sunset',clouds:'Clouds'};
+
+function siSyncThemeUI(theme){
+  var color = SI_THEME_COLORS[theme] || '#5e6ad2';
+  var label = SI_THEME_LABELS[theme] || theme;
+  ['themeDot','themeToggleDot'].forEach(function(id){
+    var d = document.getElementById(id);
+    if(d) d.style.background = color;
+  });
+  var l = document.getElementById('themeName');
+  if(l) l.textContent = label;
+}
+
 window.cycleTheme=function(){
-  // 7 color themes + dark/light base = 9 total options
-  var themes = ['dark','light','jungle','ocean','nebula','beach','planet','sunset','clouds'];
   var current = document.documentElement.getAttribute('data-theme') || 'dark';
-  var nextIndex = (themes.indexOf(current) + 1) % themes.length;
-  var nextTheme = themes[nextIndex];
+  var nextTheme = SI_THEMES[(SI_THEMES.indexOf(current) + 1) % SI_THEMES.length];
   document.documentElement.setAttribute('data-theme', nextTheme);
-  // Update button dot and label
-  var dot = document.getElementById('themeDot');
-  var label = document.getElementById('themeName');
-  var themeColors = {dark:'#5e6ad2',light:'#5e6ad2',jungle:'#ffe000',ocean:'#abc4ff',nebula:'#07f49e',beach:'#eca9bb',planet:'#f5ccd4',sunset:'#f9a470',clouds:'#abc4ff'};
-  var themeLabels = {dark:'Dark',light:'Light',jungle:'Jungle',ocean:'Ocean',nebula:'Nebula',beach:'Beach',planet:'Planet',sunset:'Sunset',clouds:'Clouds'};
-  if(dot) dot.style.background = themeColors[nextTheme] || '#5e6ad2';
-  if(label) label.textContent = themeLabels[nextTheme] || nextTheme;
+  try { localStorage.setItem('slidingVariantTheme', nextTheme); } catch(e){}
+  siSyncThemeUI(nextTheme);
 };
+
+// restore the reader's last choice
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('slidingVariantTheme'); } catch(e){}
+  if(saved && SI_THEMES.indexOf(saved) >= 0){
+    document.documentElement.setAttribute('data-theme', saved);
+    siSyncThemeUI(saved);
+  }
+})();
 
 // Color themes (7 palettes from William)
 var colorThemes = [
