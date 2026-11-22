@@ -681,7 +681,13 @@ window.toggleVariant = function(){
   try { localStorage.setItem('slidingVariant', window._variant); } catch(e){}
   var btn = document.getElementById('variantToggle');
   if(btn) btn.textContent = window._variant;
-  if(typeof renderSlide === 'function' && typeof questions !== 'undefined' && questions.length) renderSlide();
+  if(typeof renderSlide === 'function' && typeof questions !== 'undefined' && questions.length){
+    renderSlide();
+    // hideAnswers() only hides the card; the rendered <li>s keep the old spelling,
+    // so repaint them if the answers are on screen.
+    var ac=document.getElementById('answersCard');
+    if(ac && ac.classList.contains('show')){ ac.classList.remove('show'); toggleAnswers(); }
+  }
 };
 
 
