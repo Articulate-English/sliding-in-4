@@ -156,24 +156,38 @@
       }).catch(function (e) { setUnlockMessage("Network error — try again.", "error"); });
   };
 
-  /* ── teacher sharing ── */
+  /* ── share a lesson ──
+     The link is the plain lesson URL, so it works for a free lesson and lands on
+     the unlock screen for a locked one. No licence is required to share. */
   window.slidingInShare = function (slug) {
-    var key = storedLicence();
-    if (!key) { openBuyModal(null); setUnlockMessage("Unlock the deck first, then share lessons with your students.", "error"); return; }
-    if (!PRODUCT_KEY) { setUnlockMessage("Sharing is not enabled yet.", "error"); return; }
-    return fetch(WORKER + "/sliding-in/grant", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ licence_key: key, product_key: PRODUCT_KEY, deck: DECK, lesson: slug })
-    }).then(function (r) { return r.json().then(function (d) { return { status: r.status, body: d }; }); })
-      .then(function (res) {
-        if (!res.body.ok) { alert("Could not create a share link: " + (res.body.error || "unknown error")); return; }
-        var url = res.body.url;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(function () { alert("Lesson link copied — send it to your students."); });
-        } else {
-          prompt("Copy this lesson link:", url);
-        }
-      }).catch(function () { alert("Network error — could not create the link."); });
+    if (!slug) return;
+    var url = window.location.origin + window.location.pathname +
+              "?lesson=" + encodeURIComponent(slug);
+    var input = document.getElementById("shareLink");
+    if (input) { input.value = url; try { input.select(); } catch (e) {} }
+    var modal = document.getElementById("shareModal");
+    if (modal) modal.classList.add("open");
+  };
+  window.closeShareModal = function () {
+    var modal = document.getElementById("shareModal");
+    if (modal) modal.classList.remove("open");
+  };
+  window.copyShareLink = function () {
+    var input = document.getElementById("shareLink");
+    if (!input) return;
+    var btn = document.getElementById("shareCopyBtn");
+    function done() {
+      if (btn) { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy link"; }, 1600); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(input.value).then(done, function () {
+        try { input.select(); document.execCommand("copy"); } catch (e) {}
+        done();
+      });
+    } else {
+      try { input.select(); document.execCommand("copy"); } catch (e) {}
+      done();
+    }
   };
 
   /* ── deep link: ?lesson=<slug>&grant=<token> ── */
@@ -209,6 +223,10 @@
       var slug = share.getAttribute("data-slug");
       if (slug) window.slidingInShare(slug);
     });
+    var shareClose = document.getElementById("shareCloseBtn");
+    if (shareClose) shareClose.addEventListener("click", window.closeShareModal);
+    var shareCopy = document.getElementById("shareCopyBtn");
+    if (shareCopy) shareCopy.addEventListener("click", window.copyShareLink);
     var unlockBtn = document.getElementById("unlockBtn");
     if (unlockBtn) unlockBtn.addEventListener("click", window.slidingInUnlock);
     var buyBtn = document.getElementById("buyBtn");

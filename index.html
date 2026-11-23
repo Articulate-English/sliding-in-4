@@ -299,6 +299,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .buy-modal-card .btn-buy.disabled{background:var(--bg3);color:var(--text-dim);cursor:not-allowed;pointer-events:none}
 .buy-modal-card .btn-close{margin-top:12px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem}
 .buy-modal-card .empty-state{margin-top:12px;font-family:var(--mono);font-size:.7rem;color:var(--text-dim);letter-spacing:.5px}
+.buy-modal-card .share-link{width:100%;box-sizing:border-box;text-align:left;font-family:var(--mono);font-size:.72rem;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:-8px 0 16px;word-break:break-all;user-select:all}
+.buy-modal-card .share-actions{display:flex;gap:10px;justify-content:center}
 .unlock-row{display:flex;gap:8px;margin-top:14px}
 .unlock-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-family:var(--mono);font-size:.75rem}
 .unlock-row input:focus{outline:none;border-color:var(--accent)}
@@ -395,6 +397,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
     </div>
     <div class="unlock-msg" id="unlockMsg"></div>
     <button class="btn-close" onclick="closeBuyModal()">Close</button>
+  </div>
+</div>
+
+<div class="buy-modal" id="shareModal" onclick="if(event.target===this)closeShareModal()">
+  <div class="buy-modal-card">
+    <h3>Share this lesson</h3>
+    <p class="sub">Anyone with this link opens this lesson directly. A free lesson opens straight away; a paid lesson opens its unlock screen.</p>
+    <input class="share-link" id="shareLink" type="text" readonly onclick="this.select()">
+    <div class="share-actions">
+      <button class="btn-buy" id="shareCopyBtn" type="button">Copy link</button>
+    </div>
+    <button class="btn-close" id="shareCloseBtn" onclick="closeShareModal()">Close</button>
   </div>
 </div>
 
@@ -1057,6 +1071,8 @@ function renderSlide(){
   document.getElementById('deckProgressFill').style.width=((currentIndex+1)/questions.length*100)+'%';
   var shuffleBtn=document.getElementById('shuffleBtn');
   if(shuffleBtn) shuffleBtn.style.display = currentIndex===0 ? '' : 'none';
+  var shareBtn=document.getElementById('shareBtn');
+  if(shareBtn) shareBtn.style.display = (currentIndex===questions.length-1) ? '' : 'none';
   hideAnswers();
 
   // Apply per-topic random color theme — unless the reader picked a theme themselves.
@@ -1094,6 +1110,9 @@ var deckImagesOn = true;
 });
 
 document.addEventListener("keydown",function(e){
+  if(document.getElementById("shareModal") && document.getElementById("shareModal").classList.contains("open")){
+    if(e.key==="Escape"){closeShareModal();}return;
+  }
   if(document.getElementById("buyModal").classList.contains("open")){
     if(e.key==="Escape"){closeBuyModal();}return;
   }
