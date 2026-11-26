@@ -325,106 +325,106 @@
   },
   {
     "id": "airportsflying",
-    "url": "https://image.pollinations.ai/prompt/Airports%20and%20Flying?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2020/02/27/20/47/airplane-4885803_1280.jpg"
   },
   {
     "id": "carsdriving",
-    "url": "https://image.pollinations.ai/prompt/Cars%20and%20Driving?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2016/03/26/22/34/snow-1281636_1280.jpg"
   },
   {
     "id": "conversation",
-    "url": "https://image.pollinations.ai/prompt/Conversation?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2024/09/10/15/15/girls-9037393_1280.jpg"
   },
   {
     "id": "cellphones",
-    "url": "https://image.pollinations.ai/prompt/Cell%20Phones?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2014/08/05/10/30/iphone-410324_1280.jpg"
   },
   {
     "id": "socialnetworksmessaging",
-    "url": "https://image.pollinations.ai/prompt/Social%20Networks%20and%20Messaging?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2018/01/28/10/59/internet-3113279_1280.jpg"
   },
   {
     "id": "introductions",
-    "url": "https://image.pollinations.ai/prompt/Introductions?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2024/02/26/14/13/business-8598076_1280.jpg"
   },
   {
     "id": "doyoulike",
-    "url": "https://image.pollinations.ai/prompt/Do%20You%20Like...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2021/01/13/14/55/confused-expressions-5914356_1280.jpg"
   },
   {
     "id": "doyouprefer",
-    "url": "https://image.pollinations.ai/prompt/Do%20You%20Prefer...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/08/30/22/55/decision-2698883_1280.jpg"
   },
   {
     "id": "advice",
-    "url": "https://image.pollinations.ai/prompt/Advice?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2025/11/26/11/37/business-9978145_1280.jpg"
   },
   {
     "id": "truthhonesty",
-    "url": "https://image.pollinations.ai/prompt/Truth%20and%20Honesty?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/07/18/08/07/puzzle-2515123_1280.jpg"
   },
   {
     "id": "okornotok",
-    "url": "https://image.pollinations.ai/prompt/OK%20or%20Not%20OK%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2020/05/21/15/38/pros-5201376_1280.jpg"
   },
   {
     "id": "risksdanger",
-    "url": "https://image.pollinations.ai/prompt/Risks%20and%20Danger?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2016/01/28/09/15/banner-1165975_1280.jpg"
   },
   {
     "id": "whatwouldyoudo",
-    "url": "https://image.pollinations.ai/prompt/What%20Would%20You%20Do...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/08/02/19/52/girl-2573111_1280.jpg"
   },
   {
     "id": "wouldyouever",
-    "url": "https://image.pollinations.ai/prompt/Would%20You%20Ever...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2014/11/21/17/17/house-540796_1280.jpg"
   },
   {
     "id": "haveyouever",
-    "url": "https://image.pollinations.ai/prompt/Have%20You%20Ever...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2015/10/28/16/45/memory-1010902_1280.jpg"
   },
   {
     "id": "whatsthebestage",
-    "url": "https://image.pollinations.ai/prompt/What%27s%20The%20Best%20Age%20To...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/01/17/15/25/face-1987212_1280.jpg"
   },
   {
     "id": "whatsthebestway",
-    "url": "https://image.pollinations.ai/prompt/What%27s%20The%20Best%20Way%20To...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2020/04/21/11/27/aerial-5072718_1280.jpg"
   },
   {
     "id": "whattime",
-    "url": "https://image.pollinations.ai/prompt/What%20Time...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2018/02/16/02/03/pocket-watch-3156771_1280.jpg"
   },
   {
     "id": "howmany",
-    "url": "https://image.pollinations.ai/prompt/How%20Many...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2020/06/01/18/47/math-5247958_1280.jpg"
   },
   {
     "id": "howoften",
-    "url": "https://image.pollinations.ai/prompt/How%20Often%20Do%20You...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2020/01/19/11/52/change-4777508_1280.jpg"
   },
   {
     "id": "howspecialisit",
-    "url": "https://image.pollinations.ai/prompt/How%20Special%20Is%20It...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2013/07/18/08/03/birthday-163362_1280.jpg"
   },
   {
     "id": "where",
-    "url": "https://image.pollinations.ai/prompt/Where...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/08/17/07/47/travel-2650303_1280.jpg"
   },
   {
     "id": "who",
-    "url": "https://image.pollinations.ai/prompt/Who...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2019/08/29/06/09/questions-4438242_1280.jpg"
   },
   {
     "id": "whodoyouusuallygoto",
-    "url": "https://image.pollinations.ai/prompt/Who%20Do%20You%20Usually%20Go%20To...%3F?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2019/09/05/04/40/person-4453057_1280.jpg"
   },
   {
     "id": "advantagesdisadvantages",
-    "url": "https://image.pollinations.ai/prompt/Advantages%20and%20Disadvantages?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/02/01/00/15/pros-and-cons-2028471_1280.jpg"
   },
   {
     "id": "annoyingthings",
-    "url": "https://image.pollinations.ai/prompt/Annoying%20Things?width=1280&height=720&nologo=true&model=flux"
+    "url": "https://cdn.pixabay.com/photo/2017/08/25/21/44/shocked-2681488_1280.jpg"
   }
 ]
